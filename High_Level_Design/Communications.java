@@ -19,7 +19,7 @@ public class Field {
          * NOT FINAL CODE. SYNTAX ERRORS EXIST
          */
         public static double decode(int encodedVal) {
-            return (encodedVal + 180) / 2;
+            return (encodedVal - 180) / 2;
         }
     }
 
