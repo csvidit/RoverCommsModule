@@ -1,4 +1,4 @@
-public class ChargeLevel{
+public class ChargeLevel implements Comms{
     
     private short chargeLevel;
 
