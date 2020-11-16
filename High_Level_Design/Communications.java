@@ -23,10 +23,22 @@ public class Field {
         }
     }
 
-    public static class ChargeLevel {
-
+    public static class AmbientTemperature { 
+        /**
+         * @param val
+         * @return 
+         */
         public static int encode(double val) {
+            return (int)((val+200)*2);
+        }
 
+        
+        /**
+         * @param encodedVal
+         * @return
+         */
+        public static double decode(int encodedVal){
+            return (encodedVal/2)-200;
         }
     }
 
