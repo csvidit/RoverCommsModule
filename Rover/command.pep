@@ -22,6 +22,20 @@ CM_itemp:	.equate 20
 CM_wind:	.equate 22
 CM_mode:	.equate 24
 
+; CM_print(*msg)
+cp_msg:	.equate 2
+
+CM_print:	ldwx 0,i
+	
+cp_for:	cpwx CM_size,i
+	brge cp_end
+	
+	deco cp_msg,sfx
+	stro newline,d
+	br cp_for
+	
+cp_end:	ret
+
 ; asbyte(byte) -> byte
 ab_char:	.equate 4
 ab_ret:	.equate 2
