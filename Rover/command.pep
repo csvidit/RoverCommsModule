@@ -1,6 +1,27 @@
 	br main
 hpPtr:	.addrss heap
 
+; Command Message Expanded Struct
+CM_size:	.equate 26
+
+; Time is big-endian
+CM_time:	.equate 0
+CM_time2:	.equate 2
+CM_time3:	.equate 4
+
+; Wait condition is big-endian
+CM_wait:	.equate 6
+CM_wait2:	.equate 8
+
+CM_light:	.equate 10
+CM_long:	.equate 12
+CM_lat:	.equate 14
+CM_charg:	.equate 16
+CM_atemp:	.equate 18
+CM_itemp:	.equate 20
+CM_wind:	.equate 22
+CM_mode:	.equate 24
+
 ; asbyte(byte) -> byte
 ab_char:	.equate 4
 ab_ret:	.equate 2

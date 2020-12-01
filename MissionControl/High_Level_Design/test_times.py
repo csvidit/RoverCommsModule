@@ -25,7 +25,7 @@ def as_2_words(x):
     lsb = x & WORD_MASK
     gsb = (x & (WORD_MASK << 16)) >> 16
     return (gsb, lsb)
-
+"""
 internal_times = [
     (374, 7925, 46782),
     (373, 945, 28),
@@ -39,5 +39,7 @@ for val in internal_times:
     print(val)
     print(from_3_words(val))
     print()
+"""
 
+print(as_2_words(1000000))
 

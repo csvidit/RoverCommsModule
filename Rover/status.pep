@@ -1,14 +1,13 @@
 	br main
 hpPtr:	.addrss heap
 
-; Status Message Exapnaded Struct
+; Status Message Expanded Struct
 SM_size:	.equate 32
 
 ; Time is big-endian
 SM_time:	.equate 0
 SM_time2:	.equate 2
 SM_time3:	.equate 4
-
 
 SM_light:	.equate 6
 SM_long:	.equate 8
