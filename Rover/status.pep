@@ -26,42 +26,62 @@ SM_indic:	.equate 26
 SM_code:	.equate 28
 SM_alert:	.equate 30
 
-; Status Message Compressed "Struct"
-MSG_size:	.equate 23
-
-MSG_latw:	.equate 10	; Beginning of the 3-byte chunk for latitude/wind speed
-MSG_wnds:	.equate 12
-
-MSG_elit:	.equate 13
-MSG_itps:	.equate 15
-
-MSG_subi:	.equate 16
-
-
 ; Read the contents of one of the test files into an uncompressed struct.
 ; parse_status_message(*msg)
 pm_msg:	.equate 2
 
 parse_SM:	ldwx 0,i
+	stro call_pm,d
 	
 pm_for:	cpwx SM_size,i
-	brgt pm_end
+	brge pm_end
 	
 	deci pm_msg,sfx
+	deco pm_msg,sfx
+	stro newline,d
+	
 	addx 2,i
 	br pm_for
 	
 pm_end:	ret
 
+; Status Message Compressed "Struct"
+MSG_size:	.equate 23
+
+MSG_latw:	.equate 8	; Beginning of the 3-byte chunk for latitude/wind speed
+MSG_wnds:	.equate 10
+
+MSG_elit:	.equate 11
+MSG_itps:	.equate 13
+
+MSG_subi:	.equate 14
+
+; print_compressed(*buf)
+pc_buf:	.equate 2
+
+print_CM:	ldwx 0,i
+	stro call_pc,d
+	
+pc_for:	cpwx MSG_size,i
+	brge pc_end
+	
+	hexo pc_buf,sfx
+	
+	addx 2,i
+	br pc_for
+	
+pc_end:	ret
+
 ; Take a pointer to an uncompressed status message and return a buffer of bytes
 ;   for the compressed message.
 ; compress_status_message(*msg) -> *buf
-cm_msg:	.equate 6
 cm_buf:	.equate 4	; retval
+cm_msg:	.equate 6
 
 cm_wrkv:	.equate 0
 
 press_SM:	subsp 2,i	; Push cm_wrkv
+	stro call_cm,d
 	
 	ldwa MSG_size,i
 	call malloc
@@ -69,7 +89,7 @@ press_SM:	subsp 2,i	; Push cm_wrkv
 	
 	ldwx 0,i
 cm_for:	cpwx 10,i	; Loop through the first 10 bytes of the message and copy verbatim
-	brgt cm_lat
+	brge cm_lat
 	
 	ldwa cm_msg,sfx
 	stwa cm_buf,sfx
@@ -79,7 +99,7 @@ cm_for:	cpwx 10,i	; Loop through the first 10 bytes of the message and copy verb
 	
 	; Latitude and Wind Speed
 cm_lat:	ldwa 0,i
-	movaflg	; Need to make sure carry is zero
+	movaflg	; Need to make sure carry is zero because rol rotates through C
 	ldwx SM_lat,i
 	ldwa cm_msg,sfx
 	rola
@@ -110,7 +130,7 @@ cm_lat:	ldwa 0,i
 	
 	ldwa 0,i
 	ldwx SM_itemp,i
-	ldwa cm_msg,sfx
+	ldba cm_msg,sfx	; Load *byte* so as to grab only the most significant bit
 	
 	ora cm_wrkv,s	; Combine msb of itemp with elevation; store
 	ldwx MSG_elit,i
@@ -122,8 +142,31 @@ cm_lat:	ldwa 0,i
 	stba cm_buf,sfx
 	
 	; Subsystem Indicator/Codes
+	ldwa 0,i
+	movaflg
+	ldwx SM_indic,i
+	ldwa cm_msg,sfx
+	rola
+	rola
+	rola
+	rola
+	rola
+	rola
 	
-cm_end:	ret
+	stwa cm_wrkv,s
+	
+	ldwx SM_code,i
+	ldwa cm_msg,sfx
+	
+	ora cm_wrkv,s	; Combine msb of indic with the code; store
+	ldwx MSG_subi,i
+	stwa cm_buf,sfx
+	
+	; Remaining fields: Hours, atemp, charge, alert
+	; TODO
+	
+cm_end:	addsp 2,i
+	ret
 
 ; malloc()
 ; Precondition: A contains a number of bytes
@@ -134,9 +177,12 @@ malloc:	ldwx hpPtr,d
 	ret
 
 ; main()
-buf_p:	.equate 0	; Pointer to the message buffer
+buf_p:	.equate 0	; Pointer to the uncompressed message buffer
+out_p:	.equate 2	; Pointer to the compressed message buffer
 
-main:	subsp 2,i	; push buf
+main:	subsp 4,i	; push out_p, buf_p
+	
+	deco hpPtr,i
 	
 	ldwa SM_size,i
 	call malloc
@@ -147,7 +193,28 @@ main:	subsp 2,i	; push buf
 	call parse_SM
 	addsp 2,i	; pop pm_buf
 	
+	ldwx buf_p,s
+	
+	subsp 4,i	; push cm_buf, cm_msg
+	stwx 2,s	; store X to cm_msg
+	call press_SM
+	ldwx 0,s	; load X from cm_buf
+	addsp 4,i	; pop cm_msg, cm_buf
+	
+	stwx out_p,s
+	
+	subsp 2,i	; push pc_buf
+	stwx 0,s
+	call print_CM
+	addsp 2,i	; pop pc_buf
+	
+	addsp 4,i	; pop buf_p, out_p
 	stop
+
+call_pm:	.ascii "Call parse message\n\x00"
+call_cm:	.ascii "Call compress message\n\x00"
+call_pc:	.ascii "Call print compressed\n\x00"
+newline:	.ascii "\n\x00"
 
 heap:	.byte 0
 .end
