@@ -1,4 +1,7 @@
 package High_Level_Design;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 public class Field {
 
     public static class Latitude {
@@ -163,7 +166,7 @@ public class Field {
          */
         public static long encode(double val)
         {
-            //code
+            for(int i=)
         }
 
         /**
@@ -174,6 +177,30 @@ public class Field {
         public static double decode(int encodedVal, int exponent)
         {
             //code
+        }
+    }
+
+    public static class InternalTime
+    {
+        public static long value()
+        {
+            LocalTime currTime = LocalTime.now();
+            LocalDate currDate = LocalDate.now();
+            long currTimeInt = currTime.toEpochSecond(currDate, ZoneOffset.ofHours(0));
+            LocalDate newEpochDate = LocalDate.of(2000, 1, 0);
+            LocalTime newEpochTime = LocalTime.of(0, 0, 0);
+            long newEpochTimeInt = newEpochTime.toEpochSecond(newEpochDate, ZoneOffset.ofHours(0));
+            long internalTime = currTimeInt - newEpochTimeInt;
+            //line below for testing only
+            System.out.print("\n"+internalTime);
+            return internalTime;
+        }
+    }
+
+    public static class Driver
+    {
+        public static void main(String[] args) {
+            InternalTime.value();
         }
     }
 
