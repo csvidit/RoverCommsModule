@@ -1,4 +1,4 @@
-package High_Level_Design;
+package MissionControl.High_Level_Design;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -166,7 +166,7 @@ public class Field {
          */
         public static long encode(double val)
         {
-            for(int i=)
+            //code
         }
 
         /**
@@ -187,7 +187,7 @@ public class Field {
             LocalTime currTime = LocalTime.now();
             LocalDate currDate = LocalDate.now();
             long currTimeInt = currTime.toEpochSecond(currDate, ZoneOffset.ofHours(0));
-            LocalDate newEpochDate = LocalDate.of(2000, 1, 0);
+            LocalDate newEpochDate = LocalDate.of(2000, 1, 1);
             LocalTime newEpochTime = LocalTime.of(0, 0, 0);
             long newEpochTimeInt = newEpochTime.toEpochSecond(newEpochDate, ZoneOffset.ofHours(0));
             long internalTime = currTimeInt - newEpochTimeInt;
