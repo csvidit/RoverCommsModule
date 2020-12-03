@@ -2,6 +2,7 @@ package MissionControl.High_Level_Design;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+
 public class Field {
 
     public static class Latitude {
@@ -159,28 +160,28 @@ public class Field {
         }
     }
 
-    public static class LightingLevel
-    {
-        /**
-         * 
-         * @param val
-         * @return
-         */
-        public static long encode(double val)
-        {
-            //code
-        }
+    // public static class LightingLevel
+    // {
+    //     /**
+    //      * 
+    //      * @param val
+    //      * @return
+    //      */
+    //     public static long encode(double val)
+    //     {
+    //         //code
+    //     }
 
-        /**
-         * 
-         * @param encodedVal
-         * @return
-         */
-        public static double decode(int encodedVal, int exponent)
-        {
-            //code
-        }
-    }
+    //     /**
+    //      * 
+    //      * @param encodedVal
+    //      * @return
+    //      */
+    //     public static double decode(int encodedVal, int exponent)
+    //     {
+    //         //code
+    //     }
+    // }
 
     public static class InternalTime
     {
@@ -199,20 +200,30 @@ public class Field {
         }
     }
 
-    public class HexDecimalConverter
+    public static class HexDecimalConverter
     {
-        public int hexToDeci(String hexNum)
+        public static int hexToDeci(String hexNum)
         {
             int num = Integer.parseInt(hexNum, 16);
             return num;
         }
 
-        public String deciToHex(int num)
+        public static String deciToHex(int num)
         {
-            String hex = Integer.toHexString(num);
+            String hex = (Integer.toHexString(num));
+            hex = hex.toUpperCase();
+            return hex;
+        }
+
+        public static String deciToHex(long num)
+        {
+            String hex = (Long.toHexString(num));
+            hex = hex.toUpperCase();
             return hex;
         }
     }
+
+    //public class WaitCondition()
 
     public static class Driver
     {
