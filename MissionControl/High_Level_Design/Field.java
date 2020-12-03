@@ -197,6 +197,21 @@ public class Field {
         }
     }
 
+    public class HexDecimalConverter
+    {
+        public int hexToDeci(String hexNum)
+        {
+            int num = Integer.parseInt(hexNum, 16);
+            return num;
+        }
+
+        public String deciToHex(int num)
+        {
+            String hex = Integer.toHexString(num);
+            return hex;
+        }
+    }
+
     public static class Driver
     {
         public static void main(String[] args) {
