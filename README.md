@@ -41,8 +41,8 @@ Vidit Khandelwal
 |                   |6               |Subsystem Code|
 |5                  |20              |Hours of Operation|
 |                   |10              |Ambient Temperature|
-|                   |9               |Charge Level|
 |                   |1               |Alert Indicator|
+|                   |9               |Charge Level|
 |**Message Size**   |**Total Bytes** |       |
 |**23**             |**23**          |       |
 

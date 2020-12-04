@@ -1,6 +1,9 @@
 	br main
 hpPtr:	.addrss heap
 
+MSK_4GSB:	.equate 0xf000
+MSK_12LB:	.equate 0x0fff
+
 ; Status Message Expanded Struct
 SM_size:	.equate 32
 
@@ -31,14 +34,11 @@ SM_alert:	.equate 30
 pm_msg:	.equate 2
 
 parse_SM:	ldwx 0,i
-	stro call_pm,d
 	
 pm_for:	cpwx SM_size,i
 	brge pm_end
 	
 	deci pm_msg,sfx
-	deco pm_msg,sfx
-	stro newline,d
 	
 	addx 2,i
 	br pm_for
@@ -46,21 +46,27 @@ pm_for:	cpwx SM_size,i
 pm_end:	ret
 
 ; Status Message Compressed "Struct"
-MSG_size:	.equate 23
+; Hexo can't print out an odd number of bytes, so we allocate 24 even though
+;   we only need 23. The last byte is zeroed during conversion.
+MSG_size:	.equate 24
 
-MSG_latw:	.equate 8	; Beginning of the 3-byte chunk for latitude/wind speed
-MSG_wnds:	.equate 10
+MSG_latw:	.equate 10	; Beginning of the 3-byte chunk for latitude/wind speed
+MSG_wnds:	.equate 12
 
-MSG_elit:	.equate 11
-MSG_itps:	.equate 13
+MSG_elit:	.equate 13
+MSG_itps:	.equate 15
 
-MSG_subi:	.equate 14
+MSG_subi:	.equate 16
+
+MSG_hrs1:	.equate 18
+
+MSG_atmp:	.equate 20
+MSG_chrg:	.equate 22
 
 ; print_compressed(*buf)
 pc_buf:	.equate 2
 
 print_CM:	ldwx 0,i
-	stro call_pc,d
 	
 pc_for:	cpwx MSG_size,i
 	brge pc_end
@@ -81,7 +87,6 @@ cm_msg:	.equate 6
 cm_wrkv:	.equate 0
 
 press_SM:	subsp 2,i	; Push cm_wrkv
-	stro call_cm,d
 	
 	ldwa MSG_size,i
 	call malloc
@@ -163,7 +168,72 @@ cm_lat:	ldwa 0,i
 	stwa cm_buf,sfx
 	
 	; Remaining fields: Hours, atemp, charge, alert
-	; TODO
+	ldwa 0,i
+	movaflg
+	ldwx SM_hour1,i
+	ldwa cm_msg,sfx
+	call rora5
+	anda MSK_4GSB,i	; Take only the 4 greatest significant bits
+	
+	stwa cm_wrkv,s
+	
+	ldwa 0,i
+	movaflg
+	ldwx SM_hour2,i
+	ldwa cm_msg,sfx
+	call rora4
+	anda MSK_12LB,i
+	
+	ora cm_wrkv,s
+	
+	ldwx MSG_hrs1,i
+	stwa cm_buf,sfx	; Store GSB word of hours of operation
+	
+	ldwa 0,i	; 4 least-significant bits of hours of operation
+	movaflg
+	ldwx SM_hour2,i
+	ldwa cm_msg,sfx
+	call rora5
+	anda MSK_4GSB,i
+	
+	stwa cm_wrkv,s
+	
+	ldwa 0,i	; Ambient temp shifts left two bits
+	movaflg
+	ldwx SM_atemp,i
+	ldwa cm_msg,sfx
+	rola
+	rola
+	
+	ora cm_wrkv,s
+	stwa cm_wrkv,s	; Store with ambient temp
+	
+	ldwa 0,i	; Alert bit
+	movaflg
+	ldwx SM_alert,i
+	ldwa cm_msg,sfx
+	rola
+	
+	ora cm_wrkv,s
+	stwa cm_wrkv,s
+	
+	ldwa 0,i	; Charge level most significant bit
+	ldwx SM_charg,i
+	ldba cm_msg,sfx
+	
+	ora cm_wrkv,s
+	ldwx MSG_atmp,i
+	stwa cm_buf,sfx
+	
+	ldwa 0,i	; zero out the entire word; See struct comment
+	ldwx MSG_chrg,i
+	stwa cm_buf,sfx
+	
+	ldwx SM_charg,i	; Last byte of charge
+	ldwa cm_msg,sfx
+	
+	ldwx MSG_chrg,i
+	stba cm_buf,sfx
 	
 cm_end:	addsp 2,i
 	ret
@@ -176,13 +246,28 @@ malloc:	ldwx hpPtr,d
 	stwa hpPtr,d
 	ret
 
+; Rotate A right 4 times (DOES NOT CLEAR C)
+; rora4()
+rora4:	rora
+	rora
+	rora
+	rora
+	ret
+
+; Rotate A right 5 times (DOES NOT CLEAR C)
+; rora5()
+rora5:	rora
+	rora
+	rora
+	rora
+	rora
+	ret
+
 ; main()
 buf_p:	.equate 0	; Pointer to the uncompressed message buffer
 out_p:	.equate 2	; Pointer to the compressed message buffer
 
 main:	subsp 4,i	; push out_p, buf_p
-	
-	deco hpPtr,i
 	
 	ldwa SM_size,i
 	call malloc
@@ -210,11 +295,6 @@ main:	subsp 4,i	; push out_p, buf_p
 	
 	addsp 4,i	; pop buf_p, out_p
 	stop
-
-call_pm:	.ascii "Call parse message\n\x00"
-call_cm:	.ascii "Call compress message\n\x00"
-call_pc:	.ascii "Call print compressed\n\x00"
-newline:	.ascii "\n\x00"
 
 heap:	.byte 0
 .end
