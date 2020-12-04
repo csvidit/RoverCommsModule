@@ -7,8 +7,8 @@ public class Field {
     public static class Latitude {
 
         /**
-         * @param val
-         * @return
+         * @param val the actual value
+         * @return the encoded value
          */
         public static int encode(double val) {
             /*if (val > 90 || val < -90)
@@ -18,10 +18,9 @@ public class Field {
         }
 
         /**
-         * @param val
-         * @return
+         * @param encodedVal the encoded value
+         * @return the actual value (decoded)
          * 
-         * NOT FINAL CODE. SYNTAX ERRORS EXIST
          */
         public static double decode(int encodedVal) {
             //return (encodedVal - 180) / 2;
@@ -31,8 +30,8 @@ public class Field {
 
     public static class Longitude { 
         /**
-         * @param val
-         * @return 
+         * @param val the actual value
+         * @return the encoded value
          */
         public static int encode(double val) {
             return (int)((val+180)*100);
@@ -40,8 +39,8 @@ public class Field {
 
         
         /**
-         * @param encodedVal
-         * @return
+         * @param encodedVal the encoded value
+         * @return the actual value (decoded)
          */
         public static double decode(int encodedVal){
             return ((encodedVal/100)-180);
@@ -50,8 +49,8 @@ public class Field {
 
     public static class AmbientTemperature { 
         /**
-         * @param val
-         * @return 
+         * @param val the actual value
+         * @return the encoded value
          */
         public static int encode(double val) {
             return (int)((val+200)*2);
@@ -59,8 +58,8 @@ public class Field {
 
         
         /**
-         * @param encodedVal
-         * @return
+         * @param encodedVal the encoded value
+         * @return the actual value (decoded)
          */
         public static double decode(int encodedVal){
             return (encodedVal/2)-200;
@@ -71,8 +70,8 @@ public class Field {
     {
         /**
          * 
-         * @param val
-         * @return
+         * @param val the actual value
+         * @return the encoded value
          */
         public static int encode(double val)
         {
@@ -81,8 +80,8 @@ public class Field {
 
         /**
          * 
-         * @param encodedVal
-         * @return
+         * @param encodedVal the encoded value
+         * @return the actual value (decoded)
          */
         public static double decode(int encodedVal)
         {
@@ -94,8 +93,8 @@ public class Field {
     {
         /**
          * 
-         * @param val
-         * @return
+         * @param val the actual value
+         * @return the encoded value
          */
         public static int encode(double val)
         {
@@ -104,8 +103,8 @@ public class Field {
 
         /**
          * 
-         * @param encodedVal
-         * @return
+         * @param encodedVal the encoded value
+         * @return the actual value (decoded)
          */
         public static double decode(int encodedVal)
         {
@@ -117,8 +116,8 @@ public class Field {
     {
         /**
          * 
-         * @param val
-         * @return
+         * @param val the actual value
+         * @return the encoded value
          */
         public static int encode(double val)
         {
@@ -127,8 +126,8 @@ public class Field {
 
         /**
          * 
-         * @param encodedVal
-         * @return
+         * @param encodedVal the encoded value
+         * @return the actual value (decoded)
          */
         public static double decode(int encodedVal)
         {
@@ -140,8 +139,8 @@ public class Field {
     {
         /**
          * 
-         * @param val
-         * @return
+         * @param val the actual value
+         * @return the encoded value
          */
         public static int encode(double val)
         {
@@ -150,8 +149,8 @@ public class Field {
 
         /**
          * 
-         * @param encodedVal
-         * @return
+         * @param encodedVal the encoded value
+         * @return the actual value (decoded)
          */
         public static double decode(int encodedVal)
         {
@@ -163,8 +162,8 @@ public class Field {
     {
         /**
          * 
-         * @param val
-         * @return
+         * @param val the actual value
+         * @return the encoded value
          */
         public static long encode(double val)
         {
@@ -173,8 +172,8 @@ public class Field {
 
         /**
          * 
-         * @param encodedVal
-         * @return
+         * @param encodedVal the encoded value
+         * @return the actual value (decoded)
          */
         public static double decode(int encodedVal, int exponent)
         {
@@ -184,6 +183,9 @@ public class Field {
 
     public static class InternalTime
     {
+        /**
+         * @return the time in milliseconds since 01/01/2020
+         */
         public static long value()
         {
             LocalTime currTime = LocalTime.now();
@@ -201,12 +203,22 @@ public class Field {
 
     public class HexDecimalConverter
     {
+        /**
+         * 
+         * @param hexNum the hexadecimal value
+         * @return the integer value
+         */
         public int hexToDeci(String hexNum)
         {
             int num = Integer.parseInt(hexNum, 16);
             return num;
         }
 
+        /**
+         * 
+         * @param num the integer value
+         * @return the hexadecimal value
+         */
         public String deciToHex(int num)
         {
             String hex = Integer.toHexString(num);
