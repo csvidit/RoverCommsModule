@@ -2,12 +2,10 @@ package MissionControl.High_Level_Design;
 
 public class Message 
 {
-
-    
     public static class Driver
     {
-        public static void main(String[] args) {
-            
+        public static void main(String[] args) 
+        {
             String message;
             
             //input the values
@@ -27,25 +25,19 @@ public class Message
             //System.out.println(Field.Latitude.encode(-7.34));
             //System.out.println(Field.HexDecimalConverter.deciToHex(Field.Latitude.encode(90)));
             
-            //Formatting of the message
-            message = Field.HexDecimalConverter.deciToHex(Field.Latitude.encode(latitude)) 
-            + Field.HexDecimalConverter.deciToHex(Field.Longitude.encode(longitude))
-            + Field.HexDecimalConverter.deciToHex(Field.ChargeLevel.encode(chargeLevel))
+            //Formatting of the command message
+            message = Field.HexDecimalConverter.deciToHex(time)
             + Field.HexDecimalConverter.deciToHex(waitCondition)
-            + Field.HexDecimalConverter.deciToHex(missionMode)
+            //LightingLevel 
+            + Field.HexDecimalConverter.deciToHex(Field.Longitude.encode(longitude))
+            + Field.HexDecimalConverter.deciToHex(Field.Latitude.encode(latitude)) 
+            + Field.HexDecimalConverter.deciToHex(Field.ChargeLevel.encode(chargeLevel))
             + Field.HexDecimalConverter.deciToHex(Field.AmbientTemperature.encode(ambientTemp))
+            + Field.HexDecimalConverter.deciToHex(missionMode)
             + Field.HexDecimalConverter.deciToHex(Field.InternalTemperature.encode(internalTemp))
-            + Field.HexDecimalConverter.deciToHex(Field.WindSpeed.encode(windSpeed))
-            + Field.HexDecimalConverter.deciToHex(time);
+            + Field.HexDecimalConverter.deciToHex(Field.WindSpeed.encode(windSpeed));
             
             System.out.println(message);
-            
-            
-
-
-
-
-
         }
     }
 
