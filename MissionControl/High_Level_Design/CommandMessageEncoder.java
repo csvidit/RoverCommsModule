@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 import java.io.File;
 import java.nio.file.Path;
 
-public class Message 
+public class CommandMessageEncoder 
 {
     public static class Driver
     {
@@ -49,6 +49,7 @@ public class Message
             System.out.print("\nTime: ");
             time=sc.nextLong();
 
+            
             /*latitude = 90;
             longitude = 180;
             chargeLevel = 100;
@@ -75,6 +76,19 @@ public class Message
             + Field.HexDecimalConverter.deciToHex(missionMode)
             + Field.HexDecimalConverter.deciToHex(Field.InternalTemperature.encode(internalTemp))
             + Field.HexDecimalConverter.deciToHex(Field.WindSpeed.encode(windSpeed));
+
+            //Integer.toBinaryString(Field.HexDecimalConverter.hexToDeci(message));
+
+            //conversion to ByteArray:
+
+            String messageBytes[] = new String[21];
+            String temp = message;
+
+            for(int i = 0 ; i < 21 ; i++)
+            {
+                messageBytes[i] = temp.substring(0,2);
+                temp=temp.substring(2);
+            }
             
             System.out.println(message);
         }
