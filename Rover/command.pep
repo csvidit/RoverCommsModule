@@ -38,6 +38,8 @@ cp_for:	cpwx CM_size,i
 	
 	deco cp_msg,sfx
 	stro newline,d
+	
+	addx 2,i
 	br cp_for
 	
 cp_end:	ret
@@ -45,11 +47,7 @@ cp_end:	ret
 ; asbyte(byte) -> byte
 ab_char:	.equate 4
 ab_ret:	.equate 2
-asbyte:	stro call_ab,d
-	hexo ab_char,s
-	stro parmsep,d
-	
-	ldwa ab_char,s
+asbyte:	ldwa ab_char,s
 	
 	; Convert char to uppercase
 	cpwa 'Z',i	; Lowercase is higher than uppercase
@@ -78,8 +76,6 @@ ab_err:	stro ab_ermsg,d
 	stop
 	
 ab_end:	stwa ab_ret,s
-	hexo ab_ret,s
-	stro newline,d
 	ret
 
 ; hexin(*buf, len)
@@ -92,7 +88,7 @@ hexin:	subsp 2,i
 	ldwx 0,i
 	
 hi_for:	cpwx hi_len,s
-	brgt hi_end
+	brge hi_end
 	
 	ldwa 0,i
 	ldba charIn,d	; Filter spaces/newlines
@@ -107,7 +103,7 @@ hi_for:	cpwx hi_len,s
 	ldwa 0,i
 	addsp 4,i
 	
-	movaflg	; clear carry bit (copies most significant bits, which are empty)
+	movaflg	; clear carry bit
 	ldwa -4,s	; Grab the return value of as_byte
 	rola
 	rola
@@ -125,7 +121,6 @@ hi_two:	ldwa 0,i
 	subsp 4,i
 	stwa 2,s
 	call asbyte
-	ldwa 0,i
 	ldwa 0,s
 	addsp 4,i
 	
@@ -154,7 +149,7 @@ MSG_lite:	.equate 10
 MSG_long:	.equate 12
 
 MSG_lat:	.equate 14
-MSG_chrg:	.equate 15
+MSG_chrg:	.equate 16
 
 MSG_atmp:	.equate 17
 MSG_wind:	.equate 19
@@ -170,7 +165,7 @@ pars_MSG:	subsp 2,i
 	
 	ldwx 0,i
 pm_for:	cpwx 12,i
-	brge pm_lat
+	brgt pm_lat
 	
 	ldwa pm_buf,sfx
 	stwa pm_msg,sfx
@@ -179,14 +174,16 @@ pm_for:	cpwx 12,i
 	br pm_for
 	
 	; Latitude and Charge Level
-pm_lat:	ldwx MSG_lat,i
+pm_lat:	ldwa 0,i	; Clear C
+	movaflg
+	ldwx MSG_lat,i
 	ldwa pm_buf,sfx
 	rora
 	
 	ldwx CM_lat,i
 	stwa pm_msg,sfx
 	
-	ldwa 0,i	; Clear C for rotate
+	ldwa 0,i	; Clear C
 	movaflg
 	ldwx MSG_lat,i
 	ldwa pm_buf,sfx
@@ -201,6 +198,8 @@ pm_lat:	ldwx MSG_lat,i
 	stwa pm_msg,sfx
 	
 	; Ambient Temp
+	ldwa 0,i	; Clear C
+	movaflg
 	ldwx MSG_atmp,i
 	ldwa pm_buf,sfx
 	
@@ -211,6 +210,8 @@ pm_lat:	ldwx MSG_lat,i
 	stwa pm_msg,sfx
 	
 	; Mission Mode
+	ldwa 0,i	; Clear C
+	movaflg
 	ldwx MSG_atmp,i
 	ldwa pm_buf,sfx
 	
@@ -227,10 +228,16 @@ pm_lat:	ldwx MSG_lat,i
 	
 	anda MASK_2ls,i
 	stba pm_wrkv,s
+	
+	ldwa 0,i	; Clear C
+	movaflg
 	ldwa pm_wrkv,s
+	ldba 0,i	; Clear garbage lsb's of wrkv
 	rora
 	stwa pm_wrkv,s
 	
+	ldwa 0,i	; Clear C
+	movaflg
 	ldwx MSG_wind,i
 	ldba pm_buf,sfx
 	
@@ -250,12 +257,12 @@ pm_lat:	ldwx MSG_lat,i
 	ldwx CM_itemp,i
 	stwa pm_msg,sfx
 	
+	addsp 2,i
 	ret
 
 ; Rotate A left 8 times (DOES NOT CLEAR C)
 ; rola8()
 rola8:	rola
-	rola
 	rola
 	rola
 	rola
