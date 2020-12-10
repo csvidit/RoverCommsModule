@@ -22,13 +22,18 @@ public class StatusMessageDecoder {
     public void decode()
     {
         //TODO decoding
-        
+
     }
 
     @Override
     public String toString()
     {
-        //TODO return user-understandable string
+        String toString="";
+        for(int i=0; i<21; i++)
+        {
+            toString+="\n"+messageByteArray[i];
+        }
+        return toString;
     }
     
     public static void main(String[] args) {
@@ -37,7 +42,7 @@ public class StatusMessageDecoder {
         System.out.print("\nEnter Rover Status Message: ");
         StatusMessageDecoder decoder = new StatusMessageDecoder(sc.nextLine());
         decoder.decode();
-        System.out.print("\n"+decoder.toString());
+        System.out.print(decoder.toString());
     }
     
 }
