@@ -10,13 +10,13 @@ public class StatusMessageDecoder {
     public StatusMessageDecoder()
     {
         statusMessage = "";
-        messageByteArray = new String[21];
+        messageByteArray = new String[23];
     }
     
     public StatusMessageDecoder(String statusMessage)
     {
         this.statusMessage = statusMessage;
-        messageByteArray = new String[21];
+        messageByteArray = new String[23];
     }
 
     public void decode()
