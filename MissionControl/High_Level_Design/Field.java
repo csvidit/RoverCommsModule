@@ -2,6 +2,7 @@ package MissionControl.High_Level_Design;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 
 public class Field {
 
@@ -202,7 +203,7 @@ public class Field {
         }
     }
 
-    public static class HexDecimalConverter
+    public static class Converter
     {
         /**
          * 
@@ -233,8 +234,86 @@ public class Field {
             hex = hex.toUpperCase();
             return hex;
         }
+
+        public static String bintoHex(String binary)
+        {
+            String[] list = SplitString.splitBin(binary, 8);
+            int[] listDec = new int[6];
+            String hex = "";
+
+            for(int i = 0; i < list.length; i++)
+            {
+                listDec[i] = Integer.parseInt(list[i], 2);
+                String temp = Field.Converter.deciToHex(listDec[i]);
+
+                if( temp.length() < 2)
+                {
+                    if (temp.length() == 1)
+                        temp = "0" + temp;
+
+                }
+                hex +=  temp;
+            }
+            return hex;
+        }
+
+        public static String hexToBin(String hex){
+            String bin = "";
+            String binFragment = "";
+            long iHex;
+            hex = hex.trim();
+            //hex = hex.replaceFirst("0x", "");
+        
+            for(int i = 0; i < hex.length(); i++){
+                iHex = Integer.parseInt(""+hex.charAt(i),16);
+                binFragment = Long.toBinaryString(iHex);
+        
+                while(binFragment.length() < 4){
+                    binFragment = "0" + binFragment;
+                }
+                bin += binFragment;
+            }
+            return bin;
+        }
     }
 
+
+    public static class SplitString
+    {
+        //given a string and an integer this method splits the string int pieces at the boundary 
+        //specified by the integer
+        public static String[] splitBin(String text, int size) 
+        {
+            ArrayList<String> parts = new ArrayList<>();
+
+            int length = text.length();
+            for (int i = 0; i < length; i += size) 
+            {
+                parts.add(text.substring(i, Math.min(length, i + size)));
+            }
+            
+            return parts.toArray(new String[0]);
+        }
+
+        public static String[] split(String text, int[] boundaries)
+        {
+            String[] parts = new String[10];
+
+            int length = text.length();
+
+            for (int i = 0; i < length; i += boundaries[i]) 
+            {
+                parts[i] = (text.substring(i, Math.min(length, i + boundaries[i])));
+            }
+            
+            return parts;
+        }
+
+        
+    }
+
+    
+  
     //public class WaitCondition()
 
     public static class Driver

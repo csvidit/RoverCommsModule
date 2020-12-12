@@ -5,19 +5,20 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
-public class CommandMessageEncoder 
+public class CommandMessageEncoder
 {
     public static class Driver
     {
-        public static void main(String[] args) 
+        public static void main(String[] args)
         {
             String message;
-            
+
             //input the values
-            
-            Path messageInput = new Path("/");
-            
+
+            //Path messageInput = new Path("/");
+
             /**If reading from standard input, use the code below */
             Scanner sc = new Scanner(System.in);
 
@@ -49,48 +50,90 @@ public class CommandMessageEncoder
             System.out.print("\nTime: ");
             time=sc.nextLong();
 
-            
-            /*latitude = 90;
-            longitude = 180;
-            chargeLevel = 100;
-            waitCondition = 92;
-            missionMode = 4;
-            //lightingLevel = 
-            ambientTemp = -28.5;
-            internalTemp = -0.5;
-            windSpeed = 182.5;
-            time = 1589656753210L;*/
+            //Hard code values for testing
+            // latitude = 90;
+            // longitude = 180;
+            // chargeLevel = 100;
+            // waitCondition = 92;
+            // missionMode = 4;
+            // lightingLevel = 23;
+            // ambientTemp = -28.5;
+            // internalTemp = -0.5;
+            // windSpeed = 182.5;
+            // time = 158965675;
 
+            //time
+            String sTime = Field.Converter.deciToHex(time);
 
-            //System.out.println(Field.Latitude.encode(-7.34));
-            //System.out.println(Field.HexDecimalConverter.deciToHex(Field.Latitude.encode(90)));
-            
-            //Formatting of the command message
-            message = Field.HexDecimalConverter.deciToHex(time)
-            + Field.HexDecimalConverter.deciToHex(waitCondition)
-            //LightingLevel 
-            + Field.HexDecimalConverter.deciToHex(Field.Longitude.encode(longitude))
-            + Field.HexDecimalConverter.deciToHex(Field.Latitude.encode(latitude)) 
-            + Field.HexDecimalConverter.deciToHex(Field.ChargeLevel.encode(chargeLevel))
-            + Field.HexDecimalConverter.deciToHex(Field.AmbientTemperature.encode(ambientTemp))
-            + Field.HexDecimalConverter.deciToHex(missionMode)
-            + Field.HexDecimalConverter.deciToHex(Field.InternalTemperature.encode(internalTemp))
-            + Field.HexDecimalConverter.deciToHex(Field.WindSpeed.encode(windSpeed));
-
-            //Integer.toBinaryString(Field.HexDecimalConverter.hexToDeci(message));
-
-            //conversion to ByteArray:
-
-            String messageBytes[] = new String[21];
-            String temp = message;
-
-            for(int i = 0 ; i < 21 ; i++)
+            if(sTime.length() < 12)
             {
-                messageBytes[i] = temp.substring(0,2);
-                temp=temp.substring(2);
+                String temp = "";
+                for(int i = 0; i < 12-(sTime.length()); i++)
+                {
+                    temp+= "0";
+                }
+                sTime = temp + sTime;
             }
-            
+
+            //wait condition
+            String sWaitCon = Field.Converter.deciToHex(waitCondition);
+            if(sWaitCon.length() < 8)
+            {
+                String temp = "";
+                for(int i = 0; i < 8-(sWaitCon.length()); i++)
+                {
+                    temp+= "0";
+                }
+                sWaitCon = temp + sWaitCon;
+            }
+
+            //longitude
+            String sLong = Field.Converter.deciToHex(Field.Longitude.encode(longitude));
+            if(sLong.length() < 8)
+            {
+                String temp = "";
+                for(int i = 0; i < 4-(sLong.length()); i++)
+                {
+                    temp+= "0";
+                }
+                sLong = temp + sLong;
+            }
+
+            //Lighting Level
+            String sLightL = Field.Converter.deciToHex(lightingLevel);
+            if(sLightL.length() < 8)
+            {
+                String temp = "";
+                for(int i = 0; i < 4-(sLightL.length()); i++)
+                {
+                    temp+= "0";
+                }
+                sLightL = temp + sLightL;
+            }
+
+            //Latitude and Charge Level
+            String latCLBinary = Integer.toBinaryString(Field.Latitude.encode(latitude)) + Integer.toBinaryString(Field.ChargeLevel.encode(chargeLevel));
+            latCLBinary = Field.Converter.bintoHex(latCLBinary);
+
+            //Ambient Temperature, Mission Mode, Internal Temperature and Wind Speed
+            String ambTempPlus = Integer.toBinaryString(Field.AmbientTemperature.encode(ambientTemp))
+            + Integer.toBinaryString(missionMode)
+            + Integer.toBinaryString(Field.InternalTemperature.encode(internalTemp))
+            + Integer.toBinaryString(Field.WindSpeed.encode(windSpeed));
+            ambTempPlus = Field.Converter.bintoHex(ambTempPlus);
+
+
+            message = sTime + sWaitCon + sLightL + sLong + latCLBinary + ambTempPlus;
             System.out.println(message);
+
+            if (message.length() == 42)
+                System.out.println("Correct");
+            //To check individual outputs
+            System.out.println( time + "- " + sTime);
+            System.out.println( waitCondition + "- " + sWaitCon);
+            System.out.println( lightingLevel + "- " + sLightL);
+            System.out.println( longitude + "- " + Field.Longitude.encode(longitude) + "- " + sLong);
+            
         }
     }
 
