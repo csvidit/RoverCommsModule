@@ -76,6 +76,7 @@ pc_for:	cpwx MSG_size,i
 	addx 2,i
 	br pc_for
 	
+	stro newline,d
 pc_end:	ret
 
 ; Take a pointer to an uncompressed status message and return a buffer of bytes
@@ -296,6 +297,7 @@ main:	subsp 4,i	; push out_p, buf_p
 	addsp 4,i	; pop buf_p, out_p
 	stop
 
+newline:	.ascii "\n\x00"
 heap:	.byte 0
 .end
 
