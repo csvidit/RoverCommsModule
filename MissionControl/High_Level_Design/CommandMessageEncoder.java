@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
 
 public class CommandMessageEncoder
 {
@@ -128,6 +127,7 @@ public class CommandMessageEncoder
 
             if (message.length() == 42)
                 System.out.println("Correct");
+            
             //To check individual outputs
             System.out.println( time + "- " + sTime);
             System.out.println( waitCondition + "- " + sWaitCon);

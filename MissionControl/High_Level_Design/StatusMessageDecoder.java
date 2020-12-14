@@ -20,20 +20,21 @@ public class StatusMessageDecoder {
         messageByteArray = new String[21];
     }
 
-    public void decode(String message)
+    public static void decode(String message)
     {
-        statusMessage = "";
-        messageByteArray = new String[21];
+        //statusMessage = "";
+        //messageByteArray = new String[21];
         
         //String intTime, ambLight; 
         //int x = 0;
+        
         String text = message;
 
-        //ArrayList<String> parts = new ArrayList<>();
         String[] parts = new String[7];
         int length = text.length();
         int count = 0;
         
+        //ArrayList<String> parts = new ArrayList<>();
         // parts.add(text.substring(count, Math.min(length, count + 12)));
         // parts.add(text.substring(count, Math.min(length, count + 4)));
         // parts.add(text.substring(count, Math.min(length, count + 4)));
@@ -75,8 +76,8 @@ public class StatusMessageDecoder {
         count = 0;
         //Subsystem Indicator(10) + Subsystem Code(6) = 4
         String subsystem = Field.Converter.hexToBin(parts[5]);
-        int subsysIn = Integer.parseInt(subsystem.substring(count, Math.min(length, count + 15)), 2);
-        int subsysCo = Integer.parseInt(subsystem.substring(count, Math.min(length, count + 9)), 2);
+        int subsystemIndicator = Integer.parseInt(subsystem.substring(count, Math.min(length, count + 15)), 2);
+        int subsystemCode = Integer.parseInt(subsystem.substring(count, Math.min(length, count + 9)), 2);
 
         count = 0;
         //Hours of Operation(20) + Ambient Temperature(10) + Alert Indicator(1) + Charge Level(9) = 10
@@ -85,6 +86,22 @@ public class StatusMessageDecoder {
         double ambTemp = Field.AmbientTemperature.decode(Integer.parseInt(hoursOpPlus.substring(count, Math.min(length, count + 10)), 2));
         int alertIndicator = Integer.parseInt(hoursOpPlus.substring(count, Math.min(length, count + 1)), 2);
         double chargeL = Field.ChargeLevel.decode(Integer.parseInt(hoursOpPlus.substring(count, Math.min(length, count + 9)), 2));
+
+        
+        System.out.println("Decoded Status Message");
+        System.out.println("Internal time: ");
+        System.out.println("Ambient Light: ");
+        System.out.println("Longitude: " + longitude);
+        System.out.println("Wind Speed: " + windS);
+        System.out.println("Latitude: " + latitude);
+        System.out.println("Elevation: " + elevation);
+        System.out.println("Internal temperature: " + intTemp);
+        System.out.println("Subsystem Indicator: " + subsystemIndicator);
+        System.out.println("Subsystem Code: " + subsystemCode);
+        System.out.println("Hours of Operation: " + hoursOp);
+        System.out.println("Ambient Temperature: " + ambTemp);
+        System.out.println("Alert Indicator: " + alertIndicator);
+        System.out.println("Charge Level: " + chargeL);
 
 
     }
@@ -104,9 +121,11 @@ public class StatusMessageDecoder {
         
         Scanner sc = new Scanner(System.in);
         System.out.print("\nEnter Rover Status Message: ");
-        StatusMessageDecoder decoder = new StatusMessageDecoder(sc.nextLine());
-        decoder.decode();
-        System.out.print(decoder.toString());
+        String message = new String(sc.nextLine());
+        decode(message);
+        
+
     }
+        
     
 }
