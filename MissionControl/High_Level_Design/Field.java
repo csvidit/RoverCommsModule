@@ -159,16 +159,19 @@ public class Field {
         }
     }
 
-    //public static class LightingLevel
+    public static class LightingLevel
     {
         /**
          * 
          * @param val the actual value
          * @return the encoded value
          */
-        //public static long encode(double val)
+        public static long encode(double val)
         {
-            //code
+            for(int exponent = 0; exponent<4; exponent++)
+            {
+                
+            }
         }
 
         /**
@@ -176,7 +179,7 @@ public class Field {
          * @param encodedVal the encoded value
          * @return the actual value (decoded)
          */
-        //public static double decode(int encodedVal, int exponent)
+        public static double decode(int encodedVal, int exponent)
         {
             //code
         }
