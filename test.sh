@@ -12,9 +12,9 @@ build() {
 }
 
 clean() {
-    rm MissionControl/*.class
+    rm -f MissionControl/*.class
     
-    rm Rover/*.pepo
+    rm -f Rover/*.pepo
 }
 
 tst() {
@@ -25,7 +25,7 @@ tst() {
     for filename in tests/status/in/*.txt; do
         outfile=$(echo $filename | sed 's#\/in\/#\/out\/#g' )
         # diff -iw # Ignore case and whitespace when diffing
-        echo repep9 Rover/status.pepo \< $filename \| java MissionControl/StatusMessageDecoder.class \| diff -iw - $outfile
+        repep9 Rover/status.pepo < $filename | java MissionControl.StatusMessageDecoder | diff -iw - $outfile
     done
     
     echo -----------
@@ -35,10 +35,17 @@ tst() {
     for filename in tests/command/in/*.txt; do
         outfile=$(echo $filename | sed 's#\/in\/#\/out\/#g' )
         # diff -iw # Ignore case and whitespace when diffing
-        echo java MissionControl/CommandMessageEncoder.class \< $filename \| repep9 Rover/command.pepo \| diff -iw - $outfile
+        java MissionControl.CommandMessageEncoder < $filename | repep9 Rover/command.pepo | diff -iw - $outfile
     done
 }
 
-build
-tst
+# Exit on failures
+set -e
+
+if [[ "$1" == "clean" ]]; then
+    clean
+else
+    build
+    tst
+fi
 

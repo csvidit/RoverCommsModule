@@ -1,4 +1,4 @@
-package MissionControl.High_Level_Design;
+package MissionControl;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -22,7 +22,7 @@ public class Field {
         /**
          * @param encodedVal the encoded value
          * @return the actual value (decoded)
-         * 
+         *
          */
         public static double decode(int encodedVal) {
             //return (encodedVal - 180) / 2;
@@ -30,7 +30,7 @@ public class Field {
         }
     }
 
-    public static class Longitude { 
+    public static class Longitude {
         /**
          * @param val the actual value
          * @return the encoded value
@@ -49,7 +49,7 @@ public class Field {
         }
     }
 
-    public static class AmbientTemperature { 
+    public static class AmbientTemperature {
         /**
          * @param val the actual value
          * @return the encoded value
@@ -71,7 +71,7 @@ public class Field {
     public static class InternalTemperature
     {
         /**
-         * 
+         *
          * @param val the actual value
          * @return the encoded value
          */
@@ -81,7 +81,7 @@ public class Field {
         }
 
         /**
-         * 
+         *
          * @param encodedVal the encoded value
          * @return the actual value (decoded)
          */
@@ -94,7 +94,7 @@ public class Field {
     public static class ChargeLevel
     {
         /**
-         * 
+         *
          * @param val the actual value
          * @return the encoded value
          */
@@ -104,7 +104,7 @@ public class Field {
         }
 
         /**
-         * 
+         *
          * @param encodedVal the encoded value
          * @return the actual value (decoded)
          */
@@ -117,7 +117,7 @@ public class Field {
     public static class WindSpeed
     {
         /**
-         * 
+         *
          * @param val the actual value
          * @return the encoded value
          */
@@ -127,7 +127,7 @@ public class Field {
         }
 
         /**
-         * 
+         *
          * @param encodedVal the encoded value
          * @return the actual value (decoded)
          */
@@ -140,7 +140,7 @@ public class Field {
     public static class Elevation
     {
         /**
-         * 
+         *
          * @param val the actual value
          * @return the encoded value
          */
@@ -150,7 +150,7 @@ public class Field {
         }
 
         /**
-         * 
+         *
          * @param encodedVal the encoded value
          * @return the actual value (decoded)
          */
@@ -163,7 +163,7 @@ public class Field {
     public static class LightingLevel
     {
         /**
-         * 
+         *
          * @param val the actual value
          * @return the encoded value
          */
@@ -173,16 +173,18 @@ public class Field {
             {
                 
             }
+            return 0;
         }
 
         /**
-         * 
+         *
          * @param encodedVal the encoded value
          * @return the actual value (decoded)
          */
         public static double decode(int encodedVal, int exponent)
         {
             //code
+            return 0;
         }
     }
 
@@ -209,7 +211,7 @@ public class Field {
     public static class Converter
     {
         /**
-         * 
+         *
          * @param hexNum the hexadecimal value
          * @return the integer value
          */
@@ -220,7 +222,7 @@ public class Field {
         }
 
         /**
-         * 
+         *
          * @param num the integer value
          * @return the hexadecimal value
          */
@@ -283,14 +285,14 @@ public class Field {
 
     public static class SplitString
     {
-        //given a string and an integer this method splits the string int pieces at the boundary 
+        //given a string and an integer this method splits the string int pieces at the boundary
         //specified by the integer
-        public static String[] splitBin(String text, int size) 
+        public static String[] splitBin(String text, int size)
         {
             ArrayList<String> parts = new ArrayList<>();
 
             int length = text.length();
-            for (int i = 0; i < length; i += size) 
+            for (int i = 0; i < length; i += size)
             {
                 parts.add(text.substring(i, Math.min(length, i + size)));
             }
@@ -304,7 +306,7 @@ public class Field {
 
             int length = text.length();
 
-            for (int i = 0; i < length; i += boundaries[i]) 
+            for (int i = 0; i < length; i += boundaries[i])
             {
                 parts[i] = (text.substring(i, Math.min(length, i + boundaries[i])));
             }

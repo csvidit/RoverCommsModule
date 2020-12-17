@@ -1,4 +1,4 @@
-package MissionControl.High_Level_Design;
+package MissionControl;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;

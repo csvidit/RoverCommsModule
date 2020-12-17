@@ -1,4 +1,4 @@
-package MissionControl.High_Level_Design;
+package MissionControl;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class StatusMessageDecoder {
         //statusMessage = "";
         //messageByteArray = new String[21];
         
-        //String intTime, ambLight; 
+        //String intTime, ambLight;
         //int x = 0;
         
         String text = message;
@@ -102,8 +102,6 @@ public class StatusMessageDecoder {
         System.out.println("Ambient Temperature: " + ambTemp);
         System.out.println("Alert Indicator: " + alertIndicator);
         System.out.println("Charge Level: " + chargeL);
-
-
     }
 
     @Override
@@ -118,14 +116,9 @@ public class StatusMessageDecoder {
     }
     
     public static void main(String[] args) {
-        
         Scanner sc = new Scanner(System.in);
         System.out.print("\nEnter Rover Status Message: ");
         String message = new String(sc.nextLine());
         decode(message);
-        
-
     }
-        
-    
 }
