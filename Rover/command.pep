@@ -294,7 +294,7 @@ malloc:	ldwx hpPtr,d
 buf:	.equate 0
 msg:	.equate 2
 	
-main:	subsp 2,i
+main:	subsp 4,i
 	
 	ldwa CM_size,i
 	call malloc
@@ -333,12 +333,12 @@ main:	subsp 2,i
 	call CM_print
 	addsp 2,i
 	
-	addsp 2,i
+	addsp 4,i
 	stop
 	
 ab_ermsg:	.ascii "Invalid hex digit: \x00"
 call_ab:	.ascii "Call as_byte: \x00"
-parmsep:	.ascii ", "
+parmsep:	.ascii ", \x00"
 newline:	.ascii "\n\x00"
 heap:	.block 1
 .end
