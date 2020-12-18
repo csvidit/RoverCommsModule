@@ -25,8 +25,8 @@ public class Field {
          *
          */
         public static double decode(int encodedVal) {
-            //return (encodedVal - 180) / 2;
-            return ((encodedVal/100)-90);
+            double value = encodedVal;
+            return ((value/100)-90);
         }
     }
 
@@ -45,7 +45,8 @@ public class Field {
          * @return the actual value (decoded)
          */
         public static double decode(int encodedVal){
-            return ((encodedVal/100)-180);
+            double value = encodedVal;
+            return ((value/100)-180);
         }
     }
 
@@ -64,7 +65,8 @@ public class Field {
          * @return the actual value (decoded)
          */
         public static double decode(int encodedVal){
-            return (encodedVal/2)-200;
+            double value = encodedVal;
+            return (value/2)-200;
         }
     }
 
@@ -87,7 +89,8 @@ public class Field {
          */
         public static double decode(int encodedVal)
         {
-            return ((encodedVal/2)-50);
+            double value = encodedVal;
+            return ((value/2)-50);
         }
     }
 
@@ -110,7 +113,8 @@ public class Field {
          */
         public static double decode(int encodedVal)
         {
-            return (encodedVal/4);
+            double value = encodedVal;
+            return (value/4);
         }
     }
 
@@ -133,7 +137,8 @@ public class Field {
          */
         public static double decode(int encodedVal)
         {
-            return (encodedVal/2);
+            double value = encodedVal;
+            return (value/2);
         }
     }
 
@@ -156,7 +161,8 @@ public class Field {
          */
         public static double decode(int encodedVal)
         {
-            return ((encodedVal/2)-200);
+            double value = encodedVal;
+            return ((value/2)-200);
         }
     }
 
@@ -207,6 +213,19 @@ public class Field {
             return internalTime;
         }
     }
+
+    // public static class WaitCondition
+    // {
+    //     public static int encode(int val)
+    //     {
+    //         return 0;
+    //     }
+
+    //     public static int decode(int encodedVal)
+    //     {
+    //         return 0;
+    //     }
+    // }
 
     public static class Converter
     {
@@ -316,10 +335,6 @@ public class Field {
 
         
     }
-
-    
-  
-    //public class WaitCondition()
 
     public static class Driver
     {
