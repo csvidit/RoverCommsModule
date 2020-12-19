@@ -214,19 +214,6 @@ public class Field {
         }
     }
 
-    // public static class WaitCondition
-    // {
-    //     public static int encode(int val)
-    //     {
-    //         return 0;
-    //     }
-
-    //     public static int decode(int encodedVal)
-    //     {
-    //         return 0;
-    //     }
-    // }
-
     public static class Converter
     {
         /**

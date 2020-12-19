@@ -34,8 +34,8 @@ public class CommandMessageEncoder
             longitude=sc.nextDouble();
             System.out.print("\nCharge Level: ");
             chargeLevel=sc.nextDouble();
-            System.out.print("\nWait Condition: ");
-            waitCondition=sc.nextInt();
+            //System.out.print("\nWait Condition: ");
+            //waitCondition=sc.nextInt();
             System.out.print("\nMission Mode: ");
             missionMode=sc.nextInt();
             System.out.print("\nLighting Level: ");
@@ -74,7 +74,16 @@ public class CommandMessageEncoder
                 sTime = temp + sTime;
             }
 
-            //wait condition
+            //wait condition for the time field
+            if (missionMode == 10)
+            {
+                waitCondition = (int)(time);
+            }
+            else
+            {
+                waitCondition = 0;
+            }
+           
             String sWaitCon = Field.Converter.deciToHex(waitCondition);
             if(sWaitCon.length() < 8)
             {
