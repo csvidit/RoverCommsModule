@@ -74,7 +74,27 @@ public class CommandMessageEncoder
                 sTime = temp + sTime;
             }
 
-            //wait condition for the time field
+            // //wait condition for the time field
+            // if (missionMode == 0){
+            //     //Navigate requires a specified location
+            //     waitCondition = Field.Longitude.encode(longitude) + Field.Latitude.encode(latitude);
+            // }
+            // else if (missionMode == 1)
+            // {
+            //     //recharge
+            // }
+            // else if (missionMode == 2 || missionMode == 3)
+            // {
+            //     //wait light above
+            // }
+            // else if (missionMode == 3)
+            // {
+            //     //
+            // }
+            // else if (missionMode == 4)
+            // {
+            //     //
+            // }
             if (missionMode == 10)
             {
                 waitCondition = (int)(time);
